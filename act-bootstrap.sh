@@ -1,27 +1,24 @@
 #!/bin/sh
 
-SCRIPT_PATH=`dirname $(readlink -f $0)`
-
 LOGDIR="log"
 LOGLEVEL=info
 USERID=$1
 ACT_BASEURL=$2
 
-FACT_TYPES=${SCRIPT_PATH}/types/fact-types.json
-META_FACT_TYPES=${SCRIPT_PATH}/types/metafact-types.json
-OBJECT_TYPES=${SCRIPT_PATH}/types/object-types.json
+FACT_TYPES=types/fact-types.json
+META_FACT_TYPES=types/metafact-types.json
+OBJECT_TYPES=types/object-types.json
 LOG=${LOGDIR}/bootstrap.log.`date +%s`
 
 if [[ ! -d ${LOGDIR} ]]; then mkdir ${LOGDIR}; fi
 
-if [ "$ACT_BASEURL" = "" ]
-then
+if [ "$ACT_BASEURL" = "" ]; then
     echo "syntax: bootstrap.sh <user id> <act baseurl>"
     echo "example: bootstrap.sh 1 http://localhost:8080"
     exit 1
 fi
 
-export PYTHONPATH=$PYTHONPATH:${SCRIPT_PATH}/bootstrap
+export PYTHONPATH=$PYTHONPATH:`pwd`/bootstrap
 
 ARGS="--userid $USERID --act-baseurl $ACT_BASEURL --loglevel $LOGLEVEL --logfile $LOG"
 
